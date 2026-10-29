@@ -1,5 +1,6 @@
 package com.anon.client;
 
+import com.mojang.blaze3d.vertex.VertexFormat;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
@@ -9,7 +10,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.InputUtil;
@@ -19,7 +19,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.BlockItem;
-import net.minecraft.item.Items;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
 import net.minecraft.screen.GenericContainerScreenHandler;
@@ -429,7 +428,7 @@ class KillAura extends Module {
             switch (sortMode.value) {
                 case "Health": val = ((LivingEntity) e).getHealth(); break;
                 case "Angle": {
-                    Vec3d dir = e.getPos().subtract(mc.player.getPos()).normalize();
+                    Vec3d dir = e.getEntityPos().subtract(mc.player.getEntityPos()).normalize();
                     Vec3d look = mc.player.getRotationVec(1f);
                     val = 1 - dir.dotProduct(look);
                     break;
@@ -527,7 +526,7 @@ class TargetStrafe extends Module {
             if (d < best) { best = d; t = e; }
         }
         if (t == null) return;
-        Vec3d dir = t.getPos().subtract(mc.player.getPos());
+        Vec3d dir = t.getEntityPos().subtract(mc.player.getEntityPos());
         Vec3d strafe = new Vec3d(-dir.z, 0, dir.x).normalize();
         mc.player.addVelocity(strafe.x * speed.value, 0, strafe.z * speed.value);
     }
