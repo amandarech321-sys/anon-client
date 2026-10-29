@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 public class AnonMixins {
-    // Classe vazia apenas para manter o arquivo compilável caso o Java exija uma classe pública
+    // Classe vazia para manter o arquivo compilável
 }
 
 @Mixin(ClientPlayNetworkHandler.class)
