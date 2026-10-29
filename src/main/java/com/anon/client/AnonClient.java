@@ -1126,7 +1126,7 @@ class ClickGUI extends Screen {
 
     @Override public void renderBackground(DrawContext ctx, int mx, int my, float d) { ctx.fill(0, 0, width, height, 0x80000000); }
 
-    @Override public boolean mouseClicked(double mx, double my, int button) {
+    public boolean mouseClicked(double mx, double my, int button) {
         mouseDown = true;
         int listX = panelX + 6, listY = panelY + 40;
         int listW = panelW - 12;
@@ -1152,13 +1152,13 @@ class ClickGUI extends Screen {
         return super.mouseClicked(mx, my, button);
     }
 
-    @Override public boolean mouseReleased(double mx, double my, int button) {
+    public boolean mouseReleased(double mx, double my, int button) {
         mouseDown = false;
         dragging = null;
         return super.mouseReleased(mx, my, button);
     }
 
-    @Override public boolean mouseDragged(double mx, double my, int button, double dx, double dy) {
+    public boolean mouseDragged(double mx, double my, int button, double dx, double dy) {
         if (dragging != null) {
             int listX = panelX + 6;
             int listW = panelW - 12;
@@ -1168,12 +1168,12 @@ class ClickGUI extends Screen {
         return super.mouseDragged(mx, my, button, dx, dy);
     }
 
-    @Override public boolean mouseScrolled(double mx, double my, double h, double v) {
+    public boolean mouseScrolled(double mx, double my, double h, double v) {
         scroll = Math.max(0, scroll - (int) (v * 20));
         return super.mouseScrolled(mx, my, h, v);
     }
 
-    @Override public boolean keyPressed(int key, int sc, int mod) {
+    public boolean keyPressed(int key, int sc, int mod) {
         if (key == GLFW.GLFW_KEY_0 || key == GLFW.GLFW_KEY_ESCAPE) {
             MinecraftClient.getInstance().setScreen(null);
             return true;
