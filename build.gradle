@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version '1.9-SNAPSHOT'
+    id 'fabric-loom' version '1.14-SNAPSHOT' // Loom correto para 1.21.11
     id 'maven-publish'
 }
 
@@ -13,10 +13,10 @@ repositories {
 }
 
 dependencies {
-    minecraft "com.mojang:minecraft:1.21.11"
-    mappings "net.fabricmc:yarn:1.21.11+build.3:v2"
-    modImplementation "net.fabricmc:fabric-loader:0.18.4"
-    modImplementation "net.fabricmc.fabric-api:fabric-api:0.140.0+1.21.11"
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 }
 
 processResources {
