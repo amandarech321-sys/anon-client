@@ -20,7 +20,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.BlockItem;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
-import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
 import net.minecraft.screen.GenericContainerScreenHandler;
 import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.text.Text;
@@ -359,9 +358,9 @@ class R {
         MinecraftClient mc = MinecraftClient.getInstance();
         TextRenderer tr = mc.textRenderer;
         ms.push();
-        ms.translate(pos.x - mc.gameRenderer.getCamera().getPos().x,
-                     pos.y - mc.gameRenderer.getCamera().getPos().y,
-                     pos.z - mc.gameRenderer.getCamera().getPos().z);
+        ms.translate(pos.x - mc.gameRenderer.getCamera().getCameraPos().x,
+                     pos.y - mc.gameRenderer.getCamera().getCameraPos().y,
+                     pos.z - mc.gameRenderer.getCamera().getCameraPos().z);
         ms.multiply(mc.gameRenderer.getCamera().getRotation());
         ms.scale(-0.025f, -0.025f, 0.025f);
         tr.draw(text, -tr.getWidth(text) / 2f, 0, color, false,
@@ -798,7 +797,7 @@ class Tracers extends Module {
         MinecraftClient mc = MinecraftClient.getInstance();
         if (mc.player == null || mc.world == null) return;
         int c = color.resolve(System.currentTimeMillis());
-        Vec3d cam = mc.gameRenderer.getCamera().getPos();
+        Vec3d cam = mc.gameRenderer.getCamera().getCameraPos();
         for (PlayerEntity p : mc.world.getPlayers()) {
             if (p == mc.player) continue;
             Vec3d target = p.getLerpedPos(d).add(0, 1.2, 0);
