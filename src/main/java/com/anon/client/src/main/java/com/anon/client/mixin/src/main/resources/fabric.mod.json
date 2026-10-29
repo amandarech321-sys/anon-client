@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "id": "anon-client",
+  "version": "1.0.0",
+  "name": "ANON Client",
+  "description": "Utility client.",
+  "authors": ["ANON"],
+  "license": "MIT",
+  "environment": "client",
+  "entrypoints": { "client": ["com.anon.client.AnonClient"] },
+  "mixins": ["anon.mixins.json"],
+  "depends": {
+    "fabricloader": ">=0.18.4",
+    "minecraft": "1.21.11",
+    "fabric-api": "*",
+    "java": ">=21"
+  }
+}
