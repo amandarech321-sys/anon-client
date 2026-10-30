@@ -152,124 +152,39 @@ class ModuleManager {
     public final List<Module> modules = new ArrayList<>();
 
     public void init() {
-        reg(new KillAura());
-        reg(new AutoClicker());
-        reg(new VelocityMod());
-        reg(new Reach());
-        reg(new Criticals());
-        reg(new Triggerbot());
-        reg(new TargetStrafe());
-        reg(new AimAssist());
-        reg(new AutoJumpReset());
-        reg(new SprintReset());
-        reg(new HitSwap());
-        reg(new ShieldBreaker());
-        reg(new Backtrack());
-        reg(new CrystalAura());
-        reg(new AutoCrystal());
-        reg(new AutoAnchor());
-        reg(new AntiBot());
-        reg(new AutoTrap());
-        reg(new AutoWeb());
-        reg(new AutoMace());
-        reg(new AutoSpear());
-        reg(new AutoElytraMace());
-        reg(new AutoLunge());
-        reg(new AutoXbow());
-        reg(new CartAssist());
-        reg(new CartRefill());
-        reg(new PearlClutch());
-        reg(new Piercing());
-        reg(new FakeLag());
-        reg(new AutoHitCrystal());
-        reg(new AutoSpearDtap());
+        reg(new KillAura()); reg(new AutoClicker()); reg(new VelocityMod()); reg(new Reach());
+        reg(new Criticals()); reg(new Triggerbot()); reg(new TargetStrafe()); reg(new AimAssist());
+        reg(new AutoJumpReset()); reg(new SprintReset()); reg(new HitSwap()); reg(new ShieldBreaker());
+        reg(new Backtrack()); reg(new CrystalAura()); reg(new AutoCrystal()); reg(new AutoAnchor());
+        reg(new AntiBot()); reg(new AutoTrap()); reg(new AutoWeb()); reg(new AutoMace());
+        reg(new AutoSpear()); reg(new AutoElytraMace()); reg(new AutoLunge()); reg(new AutoXbow());
+        reg(new CartAssist()); reg(new CartRefill()); reg(new PearlClutch()); reg(new Piercing());
+        reg(new FakeLag()); reg(new AutoHitCrystal()); reg(new AutoSpearDtap());
 
-        reg(new Fly());
-        reg(new Speed());
-        reg(new NoFall());
-        reg(new Scaffold());
-        reg(new Step());
-        reg(new Sprint());
-        reg(new NoSlow());
-        reg(new Parkour());
-        reg(new ReverseStep());
-        reg(new AntiHunger());
-        reg(new AntiLevitation());
-        reg(new AntiPush());
-        reg(new NoJumpDelay());
-        reg(new WindCharge());
-        reg(new ElytraJump());
-        reg(new SpinBot());
-        reg(new MoveFix());
-        reg(new InventoryWalk());
-        reg(new AntiPowderSnow());
-        reg(new SnapTap());
+        reg(new Fly()); reg(new Speed()); reg(new NoFall()); reg(new Scaffold());
+        reg(new Step()); reg(new Sprint()); reg(new NoSlow()); reg(new Parkour());
+        reg(new ReverseStep()); reg(new AntiHunger()); reg(new AntiLevitation()); reg(new AntiPush());
+        reg(new NoJumpDelay()); reg(new WindCharge()); reg(new ElytraJump()); reg(new SpinBot());
+        reg(new MoveFix()); reg(new InventoryWalk()); reg(new AntiPowderSnow()); reg(new SnapTap());
 
-        reg(new ChestStealer());
-        reg(new AutoArmour());
-        reg(new FastPlace());
-        reg(new NoBreakDelay());
-        reg(new AutoTool());
-        reg(new InventoryCleaner());
-        reg(new MiddleClickFriend());
-        reg(new NameProtect());
-        reg(new KeyPearl());
-        reg(new SilentTotem());
-        reg(new HoverTotem());
-        reg(new AntiGuiClose());
-        reg(new AntiCob());
-        reg(new Clutch());
-        reg(new MLG());
-        reg(new RightClicker());
-        reg(new TargetList());
-        reg(new XCarry());
-        reg(new GhostHand());
-        reg(new Disabler());
-        reg(new Overtick());
-        reg(new ClientSpoofer());
-        reg(new CrystalOptimizer());
+        reg(new ChestStealer()); reg(new AutoArmour()); reg(new FastPlace()); reg(new NoBreakDelay());
+        reg(new AutoTool()); reg(new InventoryCleaner()); reg(new MiddleClickFriend()); reg(new NameProtect());
+        reg(new KeyPearl()); reg(new SilentTotem()); reg(new HoverTotem()); reg(new AntiGuiClose());
+        reg(new AntiCob()); reg(new Clutch()); reg(new MLG()); reg(new RightClicker());
+        reg(new TargetList()); reg(new XCarry()); reg(new GhostHand()); reg(new Disabler());
+        reg(new Overtick()); reg(new ClientSpoofer()); reg(new CrystalOptimizer());
 
-        reg(new PlayerESP());
-        reg(new Nametags());
-        reg(new Tracers());
-        reg(new Fullbright());
-        reg(new Chams());
-        reg(new HUD());
-        reg(new ArrayListMod());
-        reg(new KeybindList());
-        reg(new TargetHUD());
-        reg(new TargetESP());
-        reg(new StorageESP());
-        reg(new ItemESP());
-        reg(new HealthTags());
-        reg(new ItemTags());
-        reg(new BpsCounter());
-        reg(new CustomCrosshair());
-        reg(new NoHurtCam());
-        reg(new NoBob());
-        reg(new NoFOV());
-        reg(new NoSwing());
-        reg(new Freecam());
-        reg(new Freelook());
-        reg(new Zoom());
-        reg(new ChinaHat());
-        reg(new Wings());
-        reg(new Hats());
-        reg(new MotionBlur());
-        reg(new TotemPop());
-        reg(new TNTTimer());
-        reg(new Trajectories());
-        reg(new PotionHud());
-        reg(new PlayerTrails());
-        reg(new HitParticles());
-        reg(new SkeletonESP());
-        reg(new TrueSight());
-        reg(new ShaderESP());
+        reg(new PlayerESP()); reg(new Nametags()); reg(new Tracers()); reg(new Fullbright());
+        reg(new Chams()); reg(new HUD()); reg(new ArrayListMod()); reg(new KeybindList());
+        reg(new TargetHUD()); reg(new TargetESP()); reg(new StorageESP()); reg(new ItemESP());
+        reg(new HealthTags()); reg(new ItemTags()); reg(new BpsCounter()); reg(new CustomCrosshair());
+        reg(new NoHurtCam()); reg(new NoBob()); reg(new NoFOV()); reg(new NoSwing());
+        reg(new Freecam()); reg(new Freelook()); reg(new Zoom()); reg(new ChinaHat());
+        reg(new Wings()); reg(new Hats()); reg(new MotionBlur()); reg(new TotemPop());
+        reg(new TNTTimer()); reg(new Trajectories()); reg(new PotionHud()); reg(new PlayerTrails());
+        reg(new HitParticles()); reg(new SkeletonESP()); reg(new TrueSight()); reg(new ShaderESP());
 
-        reg(new Panic());
-        reg(new SelfDestruct());
-        reg(new StreamProof());
-        reg(new DiscordRPC());
+        reg(new Panic()); reg(new SelfDestruct()); reg(new StreamProof()); reg(new DiscordRPC());
     }
 
     private void reg(Module m) { modules.add(m); }
@@ -285,9 +200,7 @@ class ModuleManager {
     public void onTick() { for (Module m : modules) if (m.isEnabled()) m.onTick(); }
     public void onRender2D(DrawContext ctx, float d) { for (Module m : modules) if (m.isEnabled()) m.onRender2D(ctx, d); }
     public void onRender3D(MatrixStack ms, float d) { for (Module m : modules) if (m.isEnabled()) m.onRender3D(ms, d); }
-    public void onRender3D(MatrixStack ms, float d) { for (Module m : modules) if (m.isEnabled()) m.onRender3D(ms, d); }
 }
-
 class R {
     public static final RenderLayer LINES_NO_DEPTH = RenderLayer.of(
             "anon_lines", VertexFormats.POSITION_COLOR, VertexFormat.DrawMode.DEBUG_LINES, 512, false, true,
@@ -413,12 +326,7 @@ class VelocityMod extends Module {
     final NumSetting vertical = add(new NumSetting("Vertical", 0, 0, 100, 1, true));
     public VelocityMod() { super("Velocity", Category.COMBAT); }
 }
-
-class Reach extends Module {
-    final NumSetting distance = add(new NumSetting("Distance", 3.1, 3, 6, 0.1, true));
-    public Reach() { super("Reach", Category.COMBAT); }
-}
-
+class Reach extends Module { final NumSetting distance = add(new NumSetting("Distance", 3.1, 3, 6, 0.1, true)); public Reach() { super("Reach", Category.COMBAT); } }
 class Criticals extends Module {
     final ModeSetting mode = add(new ModeSetting("Mode", "Packet", "Packet", "Jump", "MiniJump"));
     public Criticals() { super("Criticals", Category.COMBAT); }
@@ -431,7 +339,6 @@ class Criticals extends Module {
         }
     }
 }
-
 class Triggerbot extends Module {
     final NumSetting delay = add(new NumSetting("Delay", 50, 0, 500, 10, true));
     private long last;
@@ -440,13 +347,10 @@ class Triggerbot extends Module {
         MinecraftClient mc = MinecraftClient.getInstance();
         if (mc.player == null || mc.currentScreen != null || System.currentTimeMillis() - last < delay.value) return;
         if (mc.crosshairTarget instanceof EntityHitResult ehr && ehr.getEntity() instanceof LivingEntity) {
-            mc.interactionManager.attackEntity(mc.player, ehr.getEntity());
-            mc.player.swingHand(Hand.MAIN_HAND);
-            last = System.currentTimeMillis();
+            mc.interactionManager.attackEntity(mc.player, ehr.getEntity()); mc.player.swingHand(Hand.MAIN_HAND); last = System.currentTimeMillis();
         }
     }
 }
-
 class TargetStrafe extends Module {
     final NumSetting radius = add(new NumSetting("Radius", 2.5, 1, 5, 0.1, true));
     final NumSetting speed = add(new NumSetting("Speed", 0.3, 0.1, 1, 0.05, true));
@@ -457,13 +361,11 @@ class TargetStrafe extends Module {
         Entity t = null; double best = 6;
         for (Entity e : mc.world.getEntities()) if (e instanceof PlayerEntity && e != mc.player && mc.player.distanceTo(e) < best) { best = mc.player.distanceTo(e); t = e; }
         if (t != null) {
-            Vec3d dir = t.getEntityPos().subtract(mc.player.getEntityPos());
-            Vec3d strafe = new Vec3d(-dir.z, 0, dir.x).normalize();
+            Vec3d dir = t.getEntityPos().subtract(mc.player.getEntityPos()); Vec3d strafe = new Vec3d(-dir.z, 0, dir.x).normalize();
             mc.player.addVelocity(strafe.x * speed.value, 0, strafe.z * speed.value);
         }
     }
 }
-
 class AimAssist extends Module {
     final NumSetting range = add(new NumSetting("Range", 4.0, 1, 8, 0.1, true));
     final NumSetting strength = add(new NumSetting("Strength", 40, 1, 100, 1, true));
@@ -472,16 +374,14 @@ class AimAssist extends Module {
     @Override public void onTick() {
         MinecraftClient mc = MinecraftClient.getInstance();
         if (mc.player == null || mc.world == null) return;
-        PlayerEntity best = null; double bestAngle = fov.value;
-        Vec3d look = mc.player.getRotationVec(1f);
+        PlayerEntity best = null; double bestAngle = fov.value; Vec3d look = mc.player.getRotationVec(1f);
         for (PlayerEntity p : mc.world.getPlayers()) {
             if (p == mc.player || mc.player.distanceTo(p) > range.value) continue;
             double ang = Math.toDegrees(Math.acos(MathHelper.clamp(p.getEyePos().subtract(mc.player.getEyePos()).normalize().dotProduct(look), -1, 1)));
             if (ang < bestAngle) { bestAngle = ang; best = p; }
         }
         if (best != null) {
-            Vec3d dir = best.getEyePos().subtract(mc.player.getEyePos());
-            float factor = strength.f() / 100f;
+            Vec3d dir = best.getEyePos().subtract(mc.player.getEyePos()); float factor = strength.f() / 100f;
             mc.player.setYaw(mc.player.getYaw() + MathHelper.wrapDegrees((float) Math.toDegrees(Math.atan2(-dir.x, dir.z)) - mc.player.getYaw()) * factor);
             mc.player.setPitch(mc.player.getPitch() + ((float) Math.toDegrees(Math.atan2(-dir.y, Math.hypot(dir.x, dir.z))) - mc.player.getPitch()) * factor);
         }
@@ -526,11 +426,9 @@ class Fly extends Module {
         if (mc.options.jumpKey.isPressed()) dir = dir.add(0, 1, 0);
         if (mc.options.sneakKey.isPressed()) dir = dir.add(0, -1, 0);
         if (dir.lengthSquared() > 0) dir = dir.normalize().multiply(speed.value);
-        mc.player.setVelocity(dir);
-        mc.player.setOnGround(false);
+        mc.player.setVelocity(dir); mc.player.setOnGround(false);
     }
 }
-
 class Speed extends Module {
     final NumSetting multiplier = add(new NumSetting("Multiplier", 1.4, 1, 3, 0.05, true));
     public Speed() { super("Speed", Category.MOVEMENT); }
@@ -539,18 +437,15 @@ class Speed extends Module {
         if (mc.player != null && mc.player.isOnGround()) mc.player.setVelocity(mc.player.getVelocity().x * multiplier.value, mc.player.getVelocity().y, mc.player.getVelocity().z * multiplier.value);
     }
 }
-
 class NoFall extends Module {
     public NoFall() { super("NoFall", Category.MOVEMENT); }
     @Override public void onTick() {
         MinecraftClient mc = MinecraftClient.getInstance();
         if (mc.player != null && mc.player.fallDistance > 2.5f) {
-            mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.OnGroundOnly(true, mc.player.horizontalCollision));
-            mc.player.fallDistance = 0f;
+            mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.OnGroundOnly(true, mc.player.horizontalCollision)); mc.player.fallDistance = 0f;
         }
     }
 }
-
 class Scaffold extends Module {
     final NumSetting delay = add(new NumSetting("Delay", 2, 1, 10, 1, true));
     private int tick = 0;
@@ -561,11 +456,9 @@ class Scaffold extends Module {
         int slot = -1;
         for (int i = 0; i < 9; i++) if (mc.player.getInventory().getStack(i).getItem() instanceof BlockItem) { slot = i; break; }
         if (slot != -1) {
-            mc.player.getInventory().selectedSlot = slot;
-            BlockPos below = mc.player.getBlockPos().down();
+            mc.player.getInventory().selectedSlot = slot; BlockPos below = mc.player.getBlockPos().down();
             if (mc.world.getBlockState(below).isAir()) {
-                mc.interactionManager.interactBlock(mc.player, Hand.MAIN_HAND, new BlockHitResult(Vec3d.ofCenter(below), Direction.UP, below, false));
-                mc.player.swingHand(Hand.MAIN_HAND);
+                mc.interactionManager.interactBlock(mc.player, Hand.MAIN_HAND, new BlockHitResult(Vec3d.ofCenter(below), Direction.UP, below, false)); mc.player.swingHand(Hand.MAIN_HAND);
             }
         }
     }
@@ -586,7 +479,7 @@ class SpinBot extends SimpleToggle { public SpinBot() { super("SpinBot", Categor
 class MoveFix extends SimpleToggle { public MoveFix() { super("MoveFix", Category.MOVEMENT); } }
 class InventoryWalk extends SimpleToggle { public InventoryWalk() { super("InventoryWalk", Category.MOVEMENT); } }
 class AntiPowderSnow extends SimpleToggle { public AntiPowderSnow() { super("AntiPowderSnow", Category.MOVEMENT); } }
-class SnapTap extends SimpleToggle { public SnapTap() { super("SnapTap", Category.MOVEMENT); } 
+class SnapTap extends SimpleToggle { public SnapTap() { super("SnapTap", Category.MOVEMENT); } }
 class ChestStealer extends Module {
     final NumSetting delay = add(new NumSetting("Delay", 3, 1, 10, 1, true));
     private int tick = 0;
