@@ -13,7 +13,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 public class AnonMixins {
-    // Classe vazia para manter o arquivo compilável
 }
 
 @Mixin(ClientPlayNetworkHandler.class)
@@ -24,10 +23,12 @@ class MixinNetworkHandler {
             if (AnonClient.MODULE_MANAGER == null) return;
             var velocityMod = AnonClient.MODULE_MANAGER.get("Velocity");
             if (velocityMod != null && velocityMod.isEnabled()) {
-                var h = velocityMod.settings.get(0) instanceof com.anon.client.NumSetting n1 ? n1 : null;
-                var v = velocityMod.settings.get(1) instanceof com.anon.client.NumSetting n2 ? n2 : null;
-                if (h != null && v != null && h.value == 0 && v.value == 0) {
-                    ci.cancel();
+                var h = velocityMod.settings.get(0);
+                var v = velocityMod.settings.get(1);
+                if (h != null && v != null && h instanceof com.anon.client.NumSetting n1 && v instanceof com.anon.client.NumSetting n2) {
+                    if (n1.value == 0 && n2.value == 0) {
+                        ci.cancel();
+                    }
                 }
             }
         }
