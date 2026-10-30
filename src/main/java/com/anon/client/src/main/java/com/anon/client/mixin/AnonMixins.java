@@ -20,7 +20,7 @@ public class AnonMixins {
 class MixinNetworkHandler {
     @Inject(method = "onPacket", at = @At("HEAD"), cancellable = true)
     private void anon$onPacket(Packet<?> packet, CallbackInfo ci) {
-        if (packet instanceof EntityVelocityUpdateS2CPacket vp) {
+        if (packet instanceof EntityVelocityUpdateS2CPacket) {
             if (AnonClient.MODULE_MANAGER == null) return;
             var velocityMod = AnonClient.MODULE_MANAGER.get("Velocity");
             if (velocityMod != null && velocityMod.isEnabled()) {
