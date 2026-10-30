@@ -16,7 +16,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ArmorItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.BlockItem;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.screen.GenericContainerScreenHandler;
@@ -67,7 +67,7 @@ class BoolSetting extends Setting {
     public BoolSetting(String n, boolean v) { super(n); this.value = v; }
 }
 
-public class NumSetting extends Setting {
+class NumSetting extends Setting {
     public double value, min, max, step;
     public boolean slider;
     public NumSetting(String n, double v, double mn, double mx, double s, boolean slider) {
@@ -201,6 +201,7 @@ class ModuleManager {
     public void onRender2D(DrawContext ctx, float d) { for (Module m : modules) if (m.isEnabled()) m.onRender2D(ctx, d); }
     public void onRender3D(MatrixStack ms, float d) { for (Module m : modules) if (m.isEnabled()) m.onRender3D(ms, d); }
 }
+
 class R {
     public static final RenderLayer LINES_NO_DEPTH = RenderLayer.of(
             "anon_lines", VertexFormats.POSITION_COLOR, VertexFormat.DrawMode.DEBUG_LINES, 512, false, true,
@@ -456,11 +457,29 @@ class Scaffold extends Module {
         int slot = -1;
         for (int i = 0; i < 9; i++) if (mc.player.getInventory().getStack(i).getItem() instanceof BlockItem) { slot = i; break; }
         if (slot != -1) {
-        mc.player.getInventory().setSelectedSlot(slot); BlockPos below = mc.player.getBlockPos().down();
+            mc.player.getInventory().setSelectedSlot(slot); BlockPos below = mc.player.getBlockPos().down();
             if (mc.world.getBlockState(below).isAir()) {
                 mc.interactionManager.interactBlock(mc.player, Hand.MAIN_HAND, new BlockHitResult(Vec3d.ofCenter(below), Direction.UP, below, false)); mc.player.swingHand(Hand.MAIN_HAND);
             }
         }
+    }
+}
+class AutoTool extends Module {
+    public AutoTool() { super("AutoTool", Category.UTILITY); }
+    @Override public void onTick() {
+        MinecraftClient mc = MinecraftClient.getInstance();
+        if (mc.player == null || mc.world == null || !(mc.crosshairTarget instanceof BlockHitResult bhr)) return;
+        var state = mc.world.getBlockState(bhr.getBlockPos());
+        if (state.isAir()) return;
+        int bestSlot = -1; float bestSpeed = 1f;
+        for (int i = 0; i < 9; i++) {
+            var stack = mc.player.getInventory().getStack(i);
+            if (!stack.isEmpty()) {
+                float speed = stack.getMiningSpeedMultiplier(state);
+                if (speed > bestSpeed) { bestSpeed = speed; bestSlot = i; }
+            }
+        }
+        if (bestSlot != -1) mc.player.getInventory().setSelectedSlot(bestSlot);
     }
 }
 
@@ -480,6 +499,7 @@ class MoveFix extends SimpleToggle { public MoveFix() { super("MoveFix", Categor
 class InventoryWalk extends SimpleToggle { public InventoryWalk() { super("InventoryWalk", Category.MOVEMENT); } }
 class AntiPowderSnow extends SimpleToggle { public AntiPowderSnow() { super("AntiPowderSnow", Category.MOVEMENT); } }
 class SnapTap extends SimpleToggle { public SnapTap() { super("SnapTap", Category.MOVEMENT); } }
+
 class ChestStealer extends Module {
     final NumSetting delay = add(new NumSetting("Delay", 3, 1, 10, 1, true));
     private int tick = 0;
@@ -504,36 +524,13 @@ class AutoArmour extends Module {
         MinecraftClient mc = MinecraftClient.getInstance();
         if (mc.player == null || ++tick % 10 != 0) return;
         for (int i = 0; i < 36; i++) {
-            if (mc.player.getInventory().getStack(i).getItem() instanceof ArmorItem armor) {
-                int target = switch (armor.getSlotType()) {
-                    case HEAD -> 39; case CHEST -> 38; case LEGS -> 37; case FEET -> 36;
-                    default -> -1;
-                };
-                if (target != -1 && mc.player.getInventory().getStack(target).isEmpty()) {
+            if (mc.player.getInventory().getStack(i).getItem() instanceof Item) {
+                if (mc.player.getInventory().getStack(i).getMaxDamage() > 0 && mc.player.getInventory().getStack(i).getName().getString().toLowerCase().contains("helmet")) {
                     mc.interactionManager.clickSlot(mc.player.playerScreenHandler.syncId, i, 0, SlotActionType.QUICK_MOVE, mc.player);
                     return;
                 }
             }
         }
-    }
-}
-
-class AutoTool extends Module {
-    public AutoTool() { super("AutoTool", Category.UTILITY); }
-    @Override public void onTick() {
-        MinecraftClient mc = MinecraftClient.getInstance();
-        if (mc.player == null || mc.world == null || !(mc.crosshairTarget instanceof BlockHitResult bhr)) return;
-        var state = mc.world.getBlockState(bhr.getBlockPos());
-        if (state.isAir()) return;
-        int bestSlot = -1; float bestSpeed = 1f;
-        for (int i = 0; i < 9; i++) {
-            var stack = mc.player.getInventory().getStack(i);
-            if (!stack.isEmpty()) {
-                float speed = stack.getMiningSpeedMultiplier(state);
-                if (speed > bestSpeed) { bestSpeed = speed; bestSlot = i; }
-            }
-        }
-mc.player.getInventory().setSelectedSlot(bestSlot);
     }
 }
 
@@ -902,10 +899,18 @@ class ClickGUI extends Screen {
         }
         return super.mouseDragged(mx, my, button, dx, dy);
     }
-    public boolean mouseScrolled(double mx, double my, double h, double v) { scroll = Math.max(0, scroll - (int) (v * 20)); return super.mouseScrolled(mx, my, h, v); }
+    public boolean mouseScrolled(double mx, double my, double h, double v) { 
+        scroll = Math.max(0, scroll - (int) (v * 20)); 
+        return super.mouseScrolled(mx, my, h, v); 
+    }
+    
     public boolean keyPressed(int key, int sc, int mod) {
-        if (key == GLFW.GLFW_KEY_0 || key == GLFW.GLFW_KEY_ESCAPE) { MinecraftClient.getInstance().setScreen(null); return true; }
+        if (key == GLFW.GLFW_KEY_0 || key == GLFW.GLFW_KEY_ESCAPE) { 
+            MinecraftClient.getInstance().setScreen(null); 
+            return true; 
+        }
         return super.keyPressed(key, sc, mod);
     }
+    
     @Override public boolean shouldPause() { return false; }
 }
