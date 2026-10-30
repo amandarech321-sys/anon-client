@@ -67,7 +67,7 @@ class BoolSetting extends Setting {
     public BoolSetting(String n, boolean v) { super(n); this.value = v; }
 }
 
-class NumSetting extends Setting {
+public class NumSetting extends Setting {
     public double value, min, max, step;
     public boolean slider;
     public NumSetting(String n, double v, double mn, double mx, double s, boolean slider) {
@@ -290,51 +290,28 @@ class ModuleManager {
 
 class R {
     public static final RenderLayer LINES_NO_DEPTH = RenderLayer.of(
-            "anon_lines",
-            VertexFormats.POSITION_COLOR,
-            VertexFormat.DrawMode.DEBUG_LINES,
-            512, false, true,
-            RenderLayer.MultiPhaseParameters.builder()
-                    .program(RenderPhase.POSITION_COLOR_PROGRAM)
-                    .transparency(RenderPhase.TRANSLUCENT_TRANSPARENCY)
-                    .depthTest(RenderPhase.ALWAYS_DEPTH_TEST)
-                    .cull(RenderPhase.DISABLE_CULLING)
-                    .build(false));
+            "anon_lines", VertexFormats.POSITION_COLOR, VertexFormat.DrawMode.DEBUG_LINES, 512, false, true,
+            RenderLayer.MultiPhaseParameters.builder().program(RenderPhase.POSITION_COLOR_PROGRAM)
+                    .transparency(RenderPhase.TRANSLUCENT_TRANSPARENCY).depthTest(RenderPhase.ALWAYS_DEPTH_TEST)
+                    .cull(RenderPhase.DISABLE_CULLING).build(false));
 
     public static void box(MatrixStack ms, Vec3d pos, float w, float h, int rgba) {
         MinecraftClient mc = MinecraftClient.getInstance();
         VertexConsumerProvider.Immediate vcp = mc.getBufferBuilders().getEntityVertexConsumers();
         VertexConsumer vc = vcp.getBuffer(LINES_NO_DEPTH);
         Matrix4f mat = ms.peek().getPositionMatrix();
-        float r = ((rgba >> 16) & 0xFF) / 255f;
-        float g = ((rgba >> 8) & 0xFF) / 255f;
-        float b = (rgba & 0xFF) / 255f;
-        float a = ((rgba >> 24) & 0xFF) / 255f;
-
-        double x1 = pos.x - w/2, x2 = pos.x + w/2;
-        double y1 = pos.y, y2 = pos.y + h;
-        double z1 = pos.z - w/2, z2 = pos.z + w/2;
-
-        line(vc, mat, x1, y1, z1, x2, y1, z1, r, g, b, a);
-        line(vc, mat, x2, y1, z1, x2, y1, z2, r, g, b, a);
-        line(vc, mat, x2, y1, z2, x1, y1, z2, r, g, b, a);
-        line(vc, mat, x1, y1, z2, x1, y1, z1, r, g, b, a);
-        line(vc, mat, x1, y2, z1, x2, y2, z1, r, g, b, a);
-        line(vc, mat, x2, y2, z1, x2, y2, z2, r, g, b, a);
-        line(vc, mat, x2, y2, z2, x1, y2, z2, r, g, b, a);
-        line(vc, mat, x1, y2, z2, x1, y2, z1, r, g, b, a);
-        line(vc, mat, x1, y1, z1, x1, y2, z1, r, g, b, a);
-        line(vc, mat, x2, y1, z1, x2, y2, z1, r, g, b, a);
-        line(vc, mat, x2, y1, z2, x2, y2, z2, r, g, b, a);
-        line(vc, mat, x1, y1, z2, x1, y2, z2, r, g, b, a);
-
+        float r = ((rgba >> 16) & 0xFF) / 255f, g = ((rgba >> 8) & 0xFF) / 255f, b = (rgba & 0xFF) / 255f, a = ((rgba >> 24) & 0xFF) / 255f;
+        double x1 = pos.x - w/2, x2 = pos.x + w/2, y1 = pos.y, y2 = pos.y + h, z1 = pos.z - w/2, z2 = pos.z + w/2;
+        line(vc, mat, x1, y1, z1, x2, y1, z1, r, g, b, a); line(vc, mat, x2, y1, z1, x2, y1, z2, r, g, b, a);
+        line(vc, mat, x2, y1, z2, x1, y1, z2, r, g, b, a); line(vc, mat, x1, y1, z2, x1, y1, z1, r, g, b, a);
+        line(vc, mat, x1, y2, z1, x2, y2, z1, r, g, b, a); line(vc, mat, x2, y2, z1, x2, y2, z2, r, g, b, a);
+        line(vc, mat, x2, y2, z2, x1, y2, z2, r, g, b, a); line(vc, mat, x1, y2, z2, x1, y2, z1, r, g, b, a);
+        line(vc, mat, x1, y1, z1, x1, y2, z1, r, g, b, a); line(vc, mat, x2, y1, z1, x2, y2, z1, r, g, b, a);
+        line(vc, mat, x2, y1, z2, x2, y2, z2, r, g, b, a); line(vc, mat, x1, y1, z2, x1, y2, z2, r, g, b, a);
         vcp.draw();
     }
 
-    private static void line(VertexConsumer vc, Matrix4f m,
-                             double x1, double y1, double z1,
-                             double x2, double y2, double z2,
-                             float r, float g, float b, float a) {
+    private static void line(VertexConsumer vc, Matrix4f m, double x1, double y1, double z1, double x2, double y2, double z2, float r, float g, float b, float a) {
         vc.vertex(m, (float) x1, (float) y1, (float) z1).color(r, g, b, a).normal(0, 1, 0);
         vc.vertex(m, (float) x2, (float) y2, (float) z2).color(r, g, b, a).normal(0, 1, 0);
     }
@@ -343,12 +320,8 @@ class R {
         MinecraftClient mc = MinecraftClient.getInstance();
         VertexConsumerProvider.Immediate vcp = mc.getBufferBuilders().getEntityVertexConsumers();
         VertexConsumer vc = vcp.getBuffer(LINES_NO_DEPTH);
-        Matrix4f m = ms.peek().getPositionMatrix();
-        float r = ((rgba >> 16) & 0xFF) / 255f;
-        float g = ((rgba >> 8) & 0xFF) / 255f;
-        float b = (rgba & 0xFF) / 255f;
-        float a = ((rgba >> 24) & 0xFF) / 255f;
-        line(vc, m, from.x, from.y, from.z, to.x, to.y, to.z, r, g, b, a);
+        line(vc, ms.peek().getPositionMatrix(), from.x, from.y, from.z, to.x, to.y, to.z,
+                ((rgba >> 16) & 0xFF)/255f, ((rgba >> 8) & 0xFF)/255f, (rgba & 0xFF)/255f, ((rgba >> 24) & 0xFF)/255f);
         vcp.draw();
     }
 
@@ -356,15 +329,10 @@ class R {
         MinecraftClient mc = MinecraftClient.getInstance();
         TextRenderer tr = mc.textRenderer;
         ms.push();
-        ms.translate(pos.x - mc.gameRenderer.getCamera().getCameraPos().x,
-                     pos.y - mc.gameRenderer.getCamera().getCameraPos().y,
-                     pos.z - mc.gameRenderer.getCamera().getCameraPos().z);
+        ms.translate(pos.x - mc.gameRenderer.getCamera().getCameraPos().x, pos.y - mc.gameRenderer.getCamera().getCameraPos().y, pos.z - mc.gameRenderer.getCamera().getCameraPos().z);
         ms.multiply(mc.gameRenderer.getCamera().getRotation());
         ms.scale(-0.025f, -0.025f, 0.025f);
-        tr.draw(text, -tr.getWidth(text) / 2f, 0, color, false,
-                ms.peek().getPositionMatrix(),
-                mc.getBufferBuilders().getEntityVertexConsumers(),
-                TextRenderer.TextLayerType.SEE_THROUGH, 0, 0xF000F0);
+        tr.draw(text, -tr.getWidth(text) / 2f, 0, color, false, ms.peek().getPositionMatrix(), mc.getBufferBuilders().getEntityVertexConsumers(), TextRenderer.TextLayerType.SEE_THROUGH, 0, 0xF000F0);
         ms.pop();
     }
 }
@@ -388,50 +356,30 @@ class KillAura extends Module {
         if (mc.player == null || mc.world == null || mc.currentScreen != null) return;
         long now = System.currentTimeMillis();
         if (now < nextHit) return;
-
         Entity target = pick(mc);
         if (target == null) return;
-
         if (rotate.value) {
             Vec3d dir = target.getEyePos().subtract(mc.player.getEyePos());
-            float yaw = (float) Math.toDegrees(Math.atan2(-dir.x, dir.z));
-            float pitch = (float) Math.toDegrees(Math.atan2(-dir.y, Math.hypot(dir.x, dir.z)));
-            mc.player.setYaw(yaw);
-            mc.player.setPitch(pitch);
+            mc.player.setYaw((float) Math.toDegrees(Math.atan2(-dir.x, dir.z)));
+            mc.player.setPitch((float) Math.toDegrees(Math.atan2(-dir.y, Math.hypot(dir.x, dir.z))));
         }
-
         mc.interactionManager.attackEntity(mc.player, target);
         mc.player.swingHand(Hand.MAIN_HAND);
-
-        int cpsVal = cps.i();
-        nextHit = now + (1000L / Math.max(1, cpsVal + rng.nextInt(3) - 1));
+        nextHit = now + (1000L / Math.max(1, cps.i() + rng.nextInt(3) - 1));
     }
 
     private Entity pick(MinecraftClient mc) {
-        Entity best = null;
-        double bestVal = Double.MAX_VALUE;
+        Entity best = null; double bestVal = Double.MAX_VALUE;
         for (Entity e : mc.world.getEntities()) {
-            if (!(e instanceof LivingEntity)) continue;
-            if (e == mc.player) continue;
+            if (!(e instanceof LivingEntity) || e == mc.player) continue;
             if (e instanceof PlayerEntity && !players.value) continue;
             if (!(e instanceof PlayerEntity) && !mobs.value) continue;
-            if (((LivingEntity) e).getHealth() <= 0) continue;
-            if (AnonClient.FRIENDS.contains(e.getName().getString())) continue;
+            if (((LivingEntity) e).getHealth() <= 0 || AnonClient.FRIENDS.contains(e.getName().getString())) continue;
             double d = mc.player.distanceTo(e);
-            if (d > range.value) continue;
-            if (!throughWalls.value && !mc.player.canSee(e)) continue;
-
-            double val;
-            switch (sortMode.value) {
-                case "Health": val = ((LivingEntity) e).getHealth(); break;
-                case "Angle": {
-                    Vec3d dir = e.getEntityPos().subtract(mc.player.getEntityPos()).normalize();
-                    Vec3d look = mc.player.getRotationVec(1f);
-                    val = 1 - dir.dotProduct(look);
-                    break;
-                }
-                default: val = d;
-            }
+            if (d > range.value || (!throughWalls.value && !mc.player.canSee(e))) continue;
+            double val = d;
+            if (sortMode.value.equals("Health")) val = ((LivingEntity) e).getHealth();
+            if (sortMode.value.equals("Angle")) val = 1 - e.getEntityPos().subtract(mc.player.getEntityPos()).normalize().dotProduct(mc.player.getRotationVec(1f));
             if (val < bestVal) { bestVal = val; best = e; }
         }
         return best;
@@ -452,17 +400,11 @@ class AutoClicker extends Module {
         MinecraftClient mc = MinecraftClient.getInstance();
         if (mc.player == null || mc.currentScreen != null) return;
         if (onlyLeft.value && !mc.options.attackKey.isPressed()) return;
-        if (weaponOnly.value && !(mc.player.getMainHandStack().getItem() instanceof net.minecraft.item.SwordItem
-                || mc.player.getMainHandStack().getItem() instanceof net.minecraft.item.AxeItem)) return;
+        if (weaponOnly.value && !(mc.player.getMainHandStack().getItem() instanceof net.minecraft.item.SwordItem || mc.player.getMainHandStack().getItem() instanceof net.minecraft.item.AxeItem)) return;
         if (System.currentTimeMillis() < nextClick) return;
-
-        if (mc.crosshairTarget instanceof EntityHitResult ehr) {
-            mc.interactionManager.attackEntity(mc.player, ehr.getEntity());
-        }
+        if (mc.crosshairTarget instanceof EntityHitResult ehr) mc.interactionManager.attackEntity(mc.player, ehr.getEntity());
         mc.player.swingHand(Hand.MAIN_HAND);
-        int mn = minCps.i(), mx = Math.max(mn, maxCps.i());
-        int cps = mn + rng.nextInt(mx - mn + 1);
-        nextClick = System.currentTimeMillis() + (1000L / cps);
+        nextClick = System.currentTimeMillis() + (1000L / (minCps.i() + rng.nextInt(Math.max(1, maxCps.i() - minCps.i() + 1))));
     }
 }
 
@@ -482,13 +424,10 @@ class Criticals extends Module {
     public Criticals() { super("Criticals", Category.COMBAT); }
     @Override public void onTick() {
         MinecraftClient mc = MinecraftClient.getInstance();
-        if (mc.player == null || !mc.options.attackKey.isPressed()) return;
-        if (!mc.player.isOnGround()) return;
+        if (mc.player == null || !mc.options.attackKey.isPressed() || !mc.player.isOnGround()) return;
         if (mode.value.equals("Packet")) {
-            mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(
-                    mc.player.getX(), mc.player.getY() + 0.0625, mc.player.getZ(), false, mc.player.horizontalCollision));
-            mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(
-                    mc.player.getX(), mc.player.getY(), mc.player.getZ(), false, mc.player.horizontalCollision));
+            mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(mc.player.getX(), mc.player.getY() + 0.0625, mc.player.getZ(), false, mc.player.horizontalCollision));
+            mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.PositionAndOnGround(mc.player.getX(), mc.player.getY(), mc.player.getZ(), false, mc.player.horizontalCollision));
         }
     }
 }
@@ -499,8 +438,7 @@ class Triggerbot extends Module {
     public Triggerbot() { super("Triggerbot", Category.COMBAT); }
     @Override public void onTick() {
         MinecraftClient mc = MinecraftClient.getInstance();
-        if (mc.player == null || mc.currentScreen != null) return;
-        if (System.currentTimeMillis() - last < delay.value) return;
+        if (mc.player == null || mc.currentScreen != null || System.currentTimeMillis() - last < delay.value) return;
         if (mc.crosshairTarget instanceof EntityHitResult ehr && ehr.getEntity() instanceof LivingEntity) {
             mc.interactionManager.attackEntity(mc.player, ehr.getEntity());
             mc.player.swingHand(Hand.MAIN_HAND);
@@ -517,15 +455,12 @@ class TargetStrafe extends Module {
         MinecraftClient mc = MinecraftClient.getInstance();
         if (mc.player == null || mc.world == null) return;
         Entity t = null; double best = 6;
-        for (Entity e : mc.world.getEntities()) {
-            if (!(e instanceof PlayerEntity) || e == mc.player) continue;
-            double d = mc.player.distanceTo(e);
-            if (d < best) { best = d; t = e; }
+        for (Entity e : mc.world.getEntities()) if (e instanceof PlayerEntity && e != mc.player && mc.player.distanceTo(e) < best) { best = mc.player.distanceTo(e); t = e; }
+        if (t != null) {
+            Vec3d dir = t.getEntityPos().subtract(mc.player.getEntityPos());
+            Vec3d strafe = new Vec3d(-dir.z, 0, dir.x).normalize();
+            mc.player.addVelocity(strafe.x * speed.value, 0, strafe.z * speed.value);
         }
-        if (t == null) return;
-        Vec3d dir = t.getEntityPos().subtract(mc.player.getEntityPos());
-        Vec3d strafe = new Vec3d(-dir.z, 0, dir.x).normalize();
-        mc.player.addVelocity(strafe.x * speed.value, 0, strafe.z * speed.value);
     }
 }
 
@@ -540,19 +475,16 @@ class AimAssist extends Module {
         PlayerEntity best = null; double bestAngle = fov.value;
         Vec3d look = mc.player.getRotationVec(1f);
         for (PlayerEntity p : mc.world.getPlayers()) {
-            if (p == mc.player) continue;
-            if (mc.player.distanceTo(p) > range.value) continue;
-            Vec3d dir = p.getEyePos().subtract(mc.player.getEyePos()).normalize();
-            double ang = Math.toDegrees(Math.acos(MathHelper.clamp(dir.dotProduct(look), -1, 1)));
+            if (p == mc.player || mc.player.distanceTo(p) > range.value) continue;
+            double ang = Math.toDegrees(Math.acos(MathHelper.clamp(p.getEyePos().subtract(mc.player.getEyePos()).normalize().dotProduct(look), -1, 1)));
             if (ang < bestAngle) { bestAngle = ang; best = p; }
         }
-        if (best == null) return;
-        Vec3d dir = best.getEyePos().subtract(mc.player.getEyePos());
-        float yaw = (float) Math.toDegrees(Math.atan2(-dir.x, dir.z));
-        float pitch = (float) Math.toDegrees(Math.atan2(-dir.y, Math.hypot(dir.x, dir.z)));
-        float factor = strength.f() / 100f;
-        mc.player.setYaw(mc.player.getYaw() + MathHelper.wrapDegrees(yaw - mc.player.getYaw()) * factor);
-        mc.player.setPitch(mc.player.getPitch() + (pitch - mc.player.getPitch()) * factor);
+        if (best != null) {
+            Vec3d dir = best.getEyePos().subtract(mc.player.getEyePos());
+            float factor = strength.f() / 100f;
+            mc.player.setYaw(mc.player.getYaw() + MathHelper.wrapDegrees((float) Math.toDegrees(Math.atan2(-dir.x, dir.z)) - mc.player.getYaw()) * factor);
+            mc.player.setPitch(mc.player.getPitch() + ((float) Math.toDegrees(Math.atan2(-dir.y, Math.hypot(dir.x, dir.z))) - mc.player.getPitch()) * factor);
+        }
     }
 }
 
@@ -586,8 +518,7 @@ class Fly extends Module {
     @Override public void onTick() {
         MinecraftClient mc = MinecraftClient.getInstance();
         if (mc.player == null) return;
-        Vec3d dir = Vec3d.ZERO;
-        Vec3d look = mc.player.getRotationVec(1f);
+        Vec3d dir = Vec3d.ZERO; Vec3d look = mc.player.getRotationVec(1f);
         if (mc.options.forwardKey.isPressed()) dir = dir.add(look.x, 0, look.z);
         if (mc.options.backKey.isPressed()) dir = dir.subtract(look.x, 0, look.z);
         if (mc.options.leftKey.isPressed()) dir = dir.add(look.z, 0, -look.x);
@@ -605,9 +536,7 @@ class Speed extends Module {
     public Speed() { super("Speed", Category.MOVEMENT); }
     @Override public void onTick() {
         MinecraftClient mc = MinecraftClient.getInstance();
-        if (mc.player == null || !mc.player.isOnGround()) return;
-        Vec3d v = mc.player.getVelocity();
-        mc.player.setVelocity(v.x * multiplier.value, v.y, v.z * multiplier.value);
+        if (mc.player != null && mc.player.isOnGround()) mc.player.setVelocity(mc.player.getVelocity().x * multiplier.value, mc.player.getVelocity().y, mc.player.getVelocity().z * multiplier.value);
     }
 }
 
@@ -615,8 +544,7 @@ class NoFall extends Module {
     public NoFall() { super("NoFall", Category.MOVEMENT); }
     @Override public void onTick() {
         MinecraftClient mc = MinecraftClient.getInstance();
-        if (mc.player == null) return;
-        if (mc.player.fallDistance > 2.5f) {
+        if (mc.player != null && mc.player.fallDistance > 2.5f) {
             mc.player.networkHandler.sendPacket(new PlayerMoveC2SPacket.OnGroundOnly(true, mc.player.horizontalCollision));
             mc.player.fallDistance = 0f;
         }
@@ -629,19 +557,16 @@ class Scaffold extends Module {
     public Scaffold() { super("Scaffold", Category.MOVEMENT); }
     @Override public void onTick() {
         MinecraftClient mc = MinecraftClient.getInstance();
-        if (mc.player == null || mc.world == null) return;
-        if (++tick % delay.i() != 0) return;
+        if (mc.player == null || mc.world == null || ++tick % delay.i() != 0) return;
         int slot = -1;
-        for (int i = 0; i < 9; i++) {
-            if (mc.player.getInventory().getStack(i).getItem() instanceof BlockItem) { slot = i; break; }
-        }
-        if (slot == -1) return;
-        mc.player.getInventory().selectedSlot = slot;
-        BlockPos below = mc.player.getBlockPos().down();
-        if (mc.world.getBlockState(below).isAir()) {
-            BlockHitResult hit = new BlockHitResult(Vec3d.ofCenter(below), Direction.UP, below, false);
-            mc.interactionManager.interactBlock(mc.player, Hand.MAIN_HAND, hit);
-            mc.player.swingHand(Hand.MAIN_HAND);
+        for (int i = 0; i < 9; i++) if (mc.player.getInventory().getStack(i).getItem() instanceof BlockItem) { slot = i; break; }
+        if (slot != -1) {
+            mc.player.getInventory().selectedSlot = slot;
+            BlockPos below = mc.player.getBlockPos().down();
+            if (mc.world.getBlockState(below).isAir()) {
+                mc.interactionManager.interactBlock(mc.player, Hand.MAIN_HAND, new BlockHitResult(Vec3d.ofCenter(below), Direction.UP, below, false));
+                mc.player.swingHand(Hand.MAIN_HAND);
+            }
         }
     }
 }
@@ -661,20 +586,17 @@ class SpinBot extends SimpleToggle { public SpinBot() { super("SpinBot", Categor
 class MoveFix extends SimpleToggle { public MoveFix() { super("MoveFix", Category.MOVEMENT); } }
 class InventoryWalk extends SimpleToggle { public InventoryWalk() { super("InventoryWalk", Category.MOVEMENT); } }
 class AntiPowderSnow extends SimpleToggle { public AntiPowderSnow() { super("AntiPowderSnow", Category.MOVEMENT); } }
-class SnapTap extends SimpleToggle { public SnapTap() { super("SnapTap", Category.MOVEMENT); } }
-
+class SnapTap extends SimpleToggle { public SnapTap() { super("SnapTap", Category.MOVEMENT); } 
 class ChestStealer extends Module {
     final NumSetting delay = add(new NumSetting("Delay", 3, 1, 10, 1, true));
     private int tick = 0;
     public ChestStealer() { super("ChestStealer", Category.UTILITY); }
     @Override public void onTick() {
         MinecraftClient mc = MinecraftClient.getInstance();
-        if (mc.player == null) return;
-        if (!(mc.player.currentScreenHandler instanceof GenericContainerScreenHandler g)) return;
+        if (mc.player == null || !(mc.player.currentScreenHandler instanceof GenericContainerScreenHandler g)) return;
         if (++tick % delay.i() != 0) return;
         for (int i = 0; i < g.getInventory().size(); i++) {
-            var s = g.getSlot(i).getStack();
-            if (!s.isEmpty()) {
+            if (!g.getSlot(i).getStack().isEmpty()) {
                 mc.interactionManager.clickSlot(g.syncId, i, 0, SlotActionType.QUICK_MOVE, mc.player);
                 return;
             }
@@ -687,17 +609,14 @@ class AutoArmour extends Module {
     public AutoArmour() { super("AutoArmour", Category.UTILITY); }
     @Override public void onTick() {
         MinecraftClient mc = MinecraftClient.getInstance();
-        if (mc.player == null) return;
-        if (++tick % 10 != 0) return;
+        if (mc.player == null || ++tick % 10 != 0) return;
         for (int i = 0; i < 36; i++) {
-            var stack = mc.player.getInventory().getStack(i);
-            if (stack.getItem() instanceof ArmorItem armor) {
+            if (mc.player.getInventory().getStack(i).getItem() instanceof ArmorItem armor) {
                 int target = switch (armor.getSlotType()) {
                     case HEAD -> 39; case CHEST -> 38; case LEGS -> 37; case FEET -> 36;
                     default -> -1;
                 };
-                if (target == -1) continue;
-                if (mc.player.getInventory().getStack(target).isEmpty()) {
+                if (target != -1 && mc.player.getInventory().getStack(target).isEmpty()) {
                     mc.interactionManager.clickSlot(mc.player.playerScreenHandler.syncId, i, 0, SlotActionType.QUICK_MOVE, mc.player);
                     return;
                 }
@@ -710,16 +629,16 @@ class AutoTool extends Module {
     public AutoTool() { super("AutoTool", Category.UTILITY); }
     @Override public void onTick() {
         MinecraftClient mc = MinecraftClient.getInstance();
-        if (mc.player == null || mc.world == null) return;
-        if (!(mc.crosshairTarget instanceof BlockHitResult bhr)) return;
+        if (mc.player == null || mc.world == null || !(mc.crosshairTarget instanceof BlockHitResult bhr)) return;
         var state = mc.world.getBlockState(bhr.getBlockPos());
         if (state.isAir()) return;
         int bestSlot = -1; float bestSpeed = 1f;
         for (int i = 0; i < 9; i++) {
             var stack = mc.player.getInventory().getStack(i);
-            if (stack.isEmpty()) continue;
-            float speed = stack.getMiningSpeedMultiplier(state);
-            if (speed > bestSpeed) { bestSpeed = speed; bestSlot = i; }
+            if (!stack.isEmpty()) {
+                float speed = stack.getMiningSpeedMultiplier(state);
+                if (speed > bestSpeed) { bestSpeed = speed; bestSlot = i; }
+            }
         }
         if (bestSlot != -1) mc.player.getInventory().selectedSlot = bestSlot;
     }
@@ -747,8 +666,7 @@ class ClientSpoofer extends SimpleToggle { public ClientSpoofer() { super("Clien
 class CrystalOptimizer extends SimpleToggle { public CrystalOptimizer() { super("CrystalOptimizer", Category.UTILITY); } }
 
 class PlayerESP extends Module {
-    final ColorSetting color = add(new ColorSetting("Color", 0xFF3C78C8))
-            .withMode((ModeSetting) add(new ModeSetting("ColorMode", "Static", "Static", "Rainbow", "Pulse")));
+    final ColorSetting color = add(new ColorSetting("Color", 0xFF3C78C8)).withMode((ModeSetting) add(new ModeSetting("ColorMode", "Static", "Static", "Rainbow", "Pulse")));
     final NumSetting width = add(new NumSetting("Width", 0.8, 0.2, 2, 0.1, true));
     final NumSetting height = add(new NumSetting("Height", 1.8, 0.5, 3, 0.1, true));
     final BoolSetting friendFilter = add(new BoolSetting("SkipFriends", true));
@@ -758,17 +676,13 @@ class PlayerESP extends Module {
         if (mc.player == null || mc.world == null) return;
         int c = color.resolve(System.currentTimeMillis());
         for (PlayerEntity p : mc.world.getPlayers()) {
-            if (p == mc.player) continue;
-            if (friendFilter.value && AnonClient.FRIENDS.contains(p.getName().getString())) continue;
-            Vec3d pos = p.getLerpedPos(d);
-            R.box(ms, pos, width.f(), height.f(), c);
+            if (p != mc.player && !(friendFilter.value && AnonClient.FRIENDS.contains(p.getName().getString()))) R.box(ms, p.getLerpedPos(d), width.f(), height.f(), c);
         }
     }
 }
 
 class Nametags extends Module {
-    final ColorSetting color = add(new ColorSetting("Color", 0xFFFFFFFF))
-            .withMode((ModeSetting) add(new ModeSetting("ColorMode", "Static", "Static", "Rainbow", "Pulse")));
+    final ColorSetting color = add(new ColorSetting("Color", 0xFFFFFFFF)).withMode((ModeSetting) add(new ModeSetting("ColorMode", "Static", "Static", "Rainbow", "Pulse")));
     final BoolSetting showDist = add(new BoolSetting("ShowDistance", true));
     final BoolSetting showHealth = add(new BoolSetting("ShowHealth", true));
     public Nametags() { super("Nametags", Category.RENDER); }
@@ -777,34 +691,30 @@ class Nametags extends Module {
         if (mc.player == null || mc.world == null) return;
         int c = color.resolve(System.currentTimeMillis());
         for (PlayerEntity p : mc.world.getPlayers()) {
-            if (p == mc.player) continue;
-            Vec3d pos = p.getLerpedPos(d).add(0, 2.2, 0);
-            StringBuilder sb = new StringBuilder(p.getName().getString());
-            if (showHealth.value) sb.append(" §c").append((int) p.getHealth()).append("§f");
-            if (showDist.value) sb.append(" §7").append(String.format("%.1f", mc.player.distanceTo(p)));
-            R.text3D(ms, pos, sb.toString(), c);
+            if (p != mc.player) {
+                Vec3d pos = p.getLerpedPos(d).add(0, 2.2, 0);
+                StringBuilder sb = new StringBuilder(p.getName().getString());
+                if (showHealth.value) sb.append(" §c").append((int) p.getHealth()).append("§f");
+                if (showDist.value) sb.append(" §7").append(String.format("%.1f", mc.player.distanceTo(p)));
+                R.text3D(ms, pos, sb.toString(), c);
+            }
         }
     }
 }
 
 class Tracers extends Module {
-    final ColorSetting color = add(new ColorSetting("Color", 0xFFFF3C3C))
-            .withMode((ModeSetting) add(new ModeSetting("ColorMode", "Static", "Static", "Rainbow", "Pulse")));
+    final ColorSetting color = add(new ColorSetting("Color", 0xFFFF3C3C)).withMode((ModeSetting) add(new ModeSetting("ColorMode", "Static", "Static", "Rainbow", "Pulse")));
     public Tracers() { super("Tracers", Category.RENDER); }
     @Override public void onRender3D(MatrixStack ms, float d) {
         MinecraftClient mc = MinecraftClient.getInstance();
         if (mc.player == null || mc.world == null) return;
         int c = color.resolve(System.currentTimeMillis());
         Vec3d cam = mc.gameRenderer.getCamera().getCameraPos();
-        for (PlayerEntity p : mc.world.getPlayers()) {
-            if (p == mc.player) continue;
-            Vec3d target = p.getLerpedPos(d).add(0, 1.2, 0);
-            R.line3D(ms, cam, target, c);
-        }
+        for (PlayerEntity p : mc.world.getPlayers()) if (p != mc.player) R.line3D(ms, cam, p.getLerpedPos(d).add(0, 1.2, 0), c);
     }
 }
 
-public class Fullbright extends Module {
+class Fullbright extends Module {
     public Fullbright() { super("Fullbright", Category.RENDER); }
     public static boolean active() { return AnonClient.MODULE_MANAGER != null && AnonClient.MODULE_MANAGER.on("Fullbright"); }
 }
@@ -815,10 +725,7 @@ class Chams extends Module {
     @Override public void onRender3D(MatrixStack ms, float d) {
         MinecraftClient mc = MinecraftClient.getInstance();
         if (mc.player == null || mc.world == null) return;
-        for (PlayerEntity p : mc.world.getPlayers()) {
-            if (p == mc.player) continue;
-            R.box(ms, p.getLerpedPos(d), 0.6f, 1.8f, color.rgba);
-        }
+        for (PlayerEntity p : mc.world.getPlayers()) if (p != mc.player) R.box(ms, p.getLerpedPos(d), 0.6f, 1.8f, color.rgba);
     }
 }
 
@@ -834,32 +741,26 @@ class HUD extends Module {
         TextRenderer tr = mc.textRenderer;
         int y = 4;
         if (watermark.value) { ctx.drawText(tr, "§bANON §7v1.0", 4, y, textColor.rgba, true); y += 12; }
-            if (coords.value) { ctx.drawText(tr, String.format("§7XYZ §f%d %d %d", (int) mc.player.getX(), (int) mc.player.getY(), (int) mc.player.getZ()), 4, y, textColor.rgba, true); y += 10; }
+        if (coords.value) { ctx.drawText(tr, String.format("§7XYZ §f%d %d %d", (int) mc.player.getX(), (int) mc.player.getY(), (int) mc.player.getZ()), 4, y, textColor.rgba, true); y += 10; }
         if (fps.value) { ctx.drawText(tr, "§7FPS §f" + mc.getCurrentFps(), 4, y, textColor.rgba, true); y += 10; }
         if (ping.value) {
             var entry = mc.getNetworkHandler() != null ? mc.getNetworkHandler().getPlayerListEntry(mc.player.getUuid()) : null;
-            int p = entry != null ? entry.getLatency() : 0;
-            ctx.drawText(tr, "§7Ping §f" + p + "ms", 4, y, textColor.rgba, true);
+            ctx.drawText(tr, "§7Ping §f" + (entry != null ? entry.getLatency() : 0) + "ms", 4, y, textColor.rgba, true);
         }
     }
 }
 
 class ArrayListMod extends Module {
-    final ColorSetting color = add(new ColorSetting("Color", 0xFF3CC8FF))
-            .withMode((ModeSetting) add(new ModeSetting("ColorMode", "Rainbow", "Static", "Rainbow", "Pulse")));
+    final ColorSetting color = add(new ColorSetting("Color", 0xFF3CC8FF)).withMode((ModeSetting) add(new ModeSetting("ColorMode", "Rainbow", "Static", "Rainbow", "Pulse")));
     final BoolSetting right = add(new BoolSetting("RightSide", true));
     public ArrayListMod() { super("ArrayList", Category.RENDER); }
     @Override public void onRender2D(DrawContext ctx, float d) {
         MinecraftClient mc = MinecraftClient.getInstance();
         TextRenderer tr = mc.textRenderer;
-        List<Module> enabled = AnonClient.MODULE_MANAGER.modules.stream()
-                .filter(Module::isEnabled).sorted((a, b) -> tr.getWidth(b.name) - tr.getWidth(a.name)).toList();
-        long now = System.currentTimeMillis();
-        int y = 4;
+        List<Module> enabled = AnonClient.MODULE_MANAGER.modules.stream().filter(Module::isEnabled).sorted((a, b) -> tr.getWidth(b.name) - tr.getWidth(a.name)).toList();
+        long now = System.currentTimeMillis(); int y = 4;
         for (Module m : enabled) {
-            int c = color.resolve(now + y * 40L);
-            int w = tr.getWidth(m.name);
-            int x = right.value ? mc.getWindow().getScaledWidth() - w - 6 : 4;
+            int c = color.resolve(now + y * 40L); int w = tr.getWidth(m.name); int x = right.value ? mc.getWindow().getScaledWidth() - w - 6 : 4;
             ctx.fill(x - 2, y - 1, x + w + 2, y + 10, 0x80000000);
             ctx.drawText(tr, m.name, x, y, c, true);
             y += 12;
@@ -870,28 +771,22 @@ class ArrayListMod extends Module {
 class KeybindList extends SimpleToggle { public KeybindList() { super("KeybindList", Category.RENDER); } }
 
 class TargetHUD extends Module {
-    final ColorSetting accent = add(new ColorSetting("Accent", 0xFFFF3C78))
-            .withMode((ModeSetting) add(new ModeSetting("ColorMode", "Static", "Static", "Rainbow", "Pulse")));
+    final ColorSetting accent = add(new ColorSetting("Accent", 0xFFFF3C78)).withMode((ModeSetting) add(new ModeSetting("ColorMode", "Static", "Static", "Rainbow", "Pulse")));
     public TargetHUD() { super("TargetHUD", Category.RENDER); }
     @Override public void onRender2D(DrawContext ctx, float d) {
         MinecraftClient mc = MinecraftClient.getInstance();
         if (mc.player == null || mc.world == null) return;
         PlayerEntity best = null; double bestD = 6;
-        for (PlayerEntity p : mc.world.getPlayers()) {
-            if (p == mc.player) continue;
-            double dd = mc.player.distanceTo(p);
-            if (dd < bestD) { bestD = dd; best = p; }
+        for (PlayerEntity p : mc.world.getPlayers()) if (p != mc.player && mc.player.distanceTo(p) < bestD) { bestD = mc.player.distanceTo(p); best = p; }
+        if (best != null) {
+            int c = accent.resolve(System.currentTimeMillis());
+            int x = mc.getWindow().getScaledWidth() / 2 - 60; int y = mc.getWindow().getScaledHeight() / 2 + 40;
+            ctx.fill(x, y, x + 120, y + 30, 0xC0000000); ctx.fill(x, y, x + 120, y + 1, c);
+            ctx.drawText(mc.textRenderer, best.getName().getString(), x + 4, y + 4, 0xFFFFFFFF, true);
+            float hp = best.getHealth() / best.getMaxHealth();
+            ctx.fill(x + 4, y + 20, x + 116, y + 26, 0xFF333333);
+            ctx.fill(x + 4, y + 20, x + 4 + (int) (112 * hp), y + 26, 0xFFFF3C3C);
         }
-        if (best == null) return;
-        int c = accent.resolve(System.currentTimeMillis());
-        int x = mc.getWindow().getScaledWidth() / 2 - 60;
-        int y = mc.getWindow().getScaledHeight() / 2 + 40;
-        ctx.fill(x, y, x + 120, y + 30, 0xC0000000);
-        ctx.fill(x, y, x + 120, y + 1, c);
-        ctx.drawText(mc.textRenderer, best.getName().getString(), x + 4, y + 4, 0xFFFFFFFF, true);
-        float hp = best.getHealth() / best.getMaxHealth();
-        ctx.fill(x + 4, y + 20, x + 116, y + 26, 0xFF333333);
-        ctx.fill(x + 4, y + 20, x + 4 + (int) (112 * hp), y + 26, 0xFFFF3C3C);
     }
 }
 
@@ -902,11 +797,7 @@ class TargetESP extends Module {
         MinecraftClient mc = MinecraftClient.getInstance();
         if (mc.player == null || mc.world == null) return;
         Entity best = null; double bestD = 6;
-        for (Entity e : mc.world.getEntities()) {
-            if (!(e instanceof PlayerEntity) || e == mc.player) continue;
-            double dd = mc.player.distanceTo(e);
-            if (dd < bestD) { bestD = dd; best = e; }
-        }
+        for (Entity e : mc.world.getEntities()) if (e instanceof PlayerEntity && e != mc.player && mc.player.distanceTo(e) < bestD) { bestD = mc.player.distanceTo(e); best = e; }
         if (best != null) R.box(ms, best.getLerpedPos(d), 1.0f, 2.1f, color.rgba);
     }
 }
@@ -918,15 +809,10 @@ class StorageESP extends Module {
     @Override public void onRender3D(MatrixStack ms, float d) {
         MinecraftClient mc = MinecraftClient.getInstance();
         if (mc.player == null || mc.world == null) return;
-        BlockPos origin = mc.player.getBlockPos();
-        int r = (int) range.value;
+        BlockPos origin = mc.player.getBlockPos(); int r = (int) range.value;
         for (BlockPos pos : BlockPos.iterate(origin.add(-r, -r, -r), origin.add(r, r, r))) {
             var be = mc.world.getBlockEntity(pos);
-            if (be instanceof net.minecraft.block.entity.ChestBlockEntity
-                    || be instanceof net.minecraft.block.entity.BarrelBlockEntity
-                    || be instanceof net.minecraft.block.entity.ShulkerBoxBlockEntity) {
-                R.box(ms, Vec3d.ofCenter(pos), 1.0f, 1.0f, color.rgba);
-            }
+            if (be instanceof net.minecraft.block.entity.ChestBlockEntity || be instanceof net.minecraft.block.entity.BarrelBlockEntity || be instanceof net.minecraft.block.entity.ShulkerBoxBlockEntity) R.box(ms, Vec3d.ofCenter(pos), 1.0f, 1.0f, color.rgba);
         }
     }
 }
@@ -937,11 +823,7 @@ class ItemESP extends Module {
     @Override public void onRender3D(MatrixStack ms, float d) {
         MinecraftClient mc = MinecraftClient.getInstance();
         if (mc.world == null) return;
-        for (Entity e : mc.world.getEntities()) {
-            if (e instanceof net.minecraft.entity.ItemEntity) {
-                R.box(ms, e.getLerpedPos(d), 0.5f, 0.5f, color.rgba);
-            }
-        }
+        for (Entity e : mc.world.getEntities()) if (e instanceof net.minecraft.entity.ItemEntity) R.box(ms, e.getLerpedPos(d), 0.5f, 0.5f, color.rgba);
     }
 }
 
@@ -955,11 +837,8 @@ class CustomCrosshair extends Module {
     public CustomCrosshair() { super("CustomCrosshair", Category.RENDER); }
     @Override public void onRender2D(DrawContext ctx, float d) {
         MinecraftClient mc = MinecraftClient.getInstance();
-        int cx = mc.getWindow().getScaledWidth() / 2;
-        int cy = mc.getWindow().getScaledHeight() / 2;
-        int s = size.i();
-        ctx.fill(cx - s, cy, cx + s, cy + 1, color.rgba);
-        ctx.fill(cx, cy - s, cx + 1, cy + s, color.rgba);
+        int cx = mc.getWindow().getScaledWidth() / 2; int cy = mc.getWindow().getScaledHeight() / 2; int s = size.i();
+        ctx.fill(cx - s, cy, cx + s, cy + 1, color.rgba); ctx.fill(cx, cy - s, cx + 1, cy + s, color.rgba);
     }
 }
 
@@ -987,12 +866,8 @@ class ShaderESP extends SimpleToggle { public ShaderESP() { super("ShaderESP", C
 class Panic extends Module {
     public Panic() { super("Panic", Category.CLIENT); key = GLFW.GLFW_KEY_P; }
     @Override protected void onEnable() {
-        for (Module m : AnonClient.MODULE_MANAGER.modules) {
-            if (m != this && m.isEnabled()) m.setEnabled(false);
-        }
-        MinecraftClient mc = MinecraftClient.getInstance();
-        if (mc.currentScreen instanceof ClickGUI) mc.setScreen(null);
-        setEnabled(false);
+        for (Module m : AnonClient.MODULE_MANAGER.modules) if (m != this && m.isEnabled()) m.setEnabled(false);
+        MinecraftClient mc = MinecraftClient.getInstance(); if (mc.currentScreen instanceof ClickGUI) mc.setScreen(null); setEnabled(false);
     }
 }
 
@@ -1000,9 +875,7 @@ class SelfDestruct extends Module {
     public SelfDestruct() { super("SelfDestruct", Category.CLIENT); }
     @Override protected void onEnable() {
         for (Module m : AnonClient.MODULE_MANAGER.modules) if (m != this) m.setEnabled(false);
-        MinecraftClient mc = MinecraftClient.getInstance();
-        if (mc.currentScreen != null) mc.setScreen(null);
-        setEnabled(false);
+        MinecraftClient mc = MinecraftClient.getInstance(); if (mc.currentScreen != null) mc.setScreen(null); setEnabled(false);
     }
 }
 
@@ -1015,6 +888,8 @@ class ClickGUI extends Screen {
     private final int panelW = 340, panelH = 360;
     private NumSetting dragging = null;
     private Setting colorPickTarget = null;
+    private int scroll = 0;
+    private boolean mouseDown = false;
 
     public ClickGUI() { super(Text.literal("ANON")); }
 
@@ -1030,36 +905,25 @@ class ClickGUI extends Screen {
             boolean active = c == currentCat;
             ctx.fill(tabX, panelY + 22, tabX + w, panelY + 36, active ? 0xFF3C78C8 : 0xFF181820);
             ctx.drawText(textRenderer, c.name(), tabX + 5, panelY + 26, 0xFFFFFFFF, false);
-            if (mx >= tabX && mx <= tabX + w && my >= panelY + 22 && my <= panelY + 36 && isClicking(mx, my)) {
-                currentCat = c;
-            }
+            if (mx >= tabX && mx <= tabX + w && my >= panelY + 22 && my <= panelY + 36 && isClick(mx, my, tabX, panelY + 22, w, 14)) currentCat = c;
             tabX += w + 2;
         }
 
-        int listX = panelX + 6, listY = panelY + 40;
-        int listW = panelW - 12;
-        int yy = listY - scroll;
+        int listX = panelX + 6, listY = panelY + 40, listW = panelW - 12, yy = listY - scroll;
         for (Module m : AnonClient.MODULE_MANAGER.byCategory(currentCat)) {
-            int rowH = 18;
-            int c = m.isEnabled() ? 0xFF3C78C8 : 0xFF1E1E26;
+            int rowH = 18, c = m.isEnabled() ? 0xFF3C78C8 : 0xFF1E1E26;
             ctx.fill(listX, yy, listX + listW, yy + rowH, c);
             ctx.drawText(textRenderer, m.name, listX + 4, yy + 5, 0xFFFFFFFF, false);
-            if (!m.settings.isEmpty()) {
-                ctx.drawText(textRenderer, m.expanded ? "▾" : "▸", listX + listW - 12, yy + 5, 0xFFAAAAAA, false);
-            }
+            if (!m.settings.isEmpty()) ctx.drawText(textRenderer, m.expanded ? "▾" : "▸", listX + listW - 12, yy + 5, 0xFFAAAAAA, false);
             yy += rowH + 2;
             if (m.expanded) {
-                for (Setting s : m.settings) {
-                    yy = drawSetting(ctx, s, listX + 8, yy, listW - 16, mx, my);
-                }
+                for (Setting s : m.settings) yy = drawSetting(ctx, s, listX + 8, yy, listW - 16, mx, my);
                 yy += 2;
             }
         }
         if (colorPickTarget != null) drawColorPicker(ctx, mx, my);
         super.render(ctx, mx, my, d);
     }
-
-    private int scroll = 0;
 
     private int drawSetting(DrawContext ctx, Setting s, int x, int y, int w, int mx, int my) {
         if (s instanceof BoolSetting b) {
@@ -1071,8 +935,7 @@ class ClickGUI extends Screen {
         }
         if (s instanceof NumSetting n) {
             ctx.fill(x, y, x + w, y + 14, 0xFF1A1A20);
-            int fillW = (int) ((n.value - n.min) / (n.max - n.min) * w);
-            ctx.fill(x, y, x + fillW, y + 14, 0xFF3C78C8);
+            ctx.fill(x, y, x + (int) ((n.value - n.min) / (n.max - n.min) * w), y + 14, 0xFF3C78C8);
             ctx.drawText(textRenderer, n.name + ": " + String.format("%.1f", n.value), x + 4, y + 3, 0xFFFFFFFF, false);
             if (mouseDown && isClick(mx, my, x, y, w, 14)) dragging = n;
             return y + 16;
@@ -1099,12 +962,10 @@ class ClickGUI extends Screen {
         ctx.fill(x, y, x + 140, y + 140, 0xF0151518);
         ctx.drawText(textRenderer, "Color Picker", x + 4, y + 4, 0xFFFFFFFF, false);
         ctx.fill(x + 4, y + 18, x + 136, y + 44, c.rgba);
-
         drawPickSlider(ctx, "R", x + 4, y + 50, 132, c.r(), mx, my, v -> c.rgba = (c.rgba & 0xFF00FFFF) | (v << 16));
         drawPickSlider(ctx, "G", x + 4, y + 70, 132, c.g(), mx, my, v -> c.rgba = (c.rgba & 0xFFFF00FF) | (v << 8));
         drawPickSlider(ctx, "B", x + 4, y + 90, 132, c.b(), mx, my, v -> c.rgba = (c.rgba & 0xFFFFFF00) | v);
         drawPickSlider(ctx, "A", x + 4, y + 110, 132, c.a(), mx, my, v -> c.rgba = (c.rgba & 0x00FFFFFF) | (v << 24));
-
         if (isClick(mx, my, x + 4, y + 128, 132, 12)) colorPickTarget = null;
     }
 
@@ -1112,30 +973,20 @@ class ClickGUI extends Screen {
         ctx.fill(x, y, x + w, y + 14, 0xFF1A1A20);
         ctx.fill(x, y, x + (int) (w * val / 255f), y + 14, 0xFF3C78C8);
         ctx.drawText(textRenderer, label + " " + val, x + 4, y + 3, 0xFFFFFFFF, false);
-        if (mouseDown && isClick(mx, my, x, y, w, 14)) {
-            int nv = (int) ((mx - x) / (float) w * 255);
-            setter.accept(Math.max(0, Math.min(255, nv)));
-        }
+        if (mouseDown && isClick(mx, my, x, y, w, 14)) setter.accept(Math.max(0, Math.min(255, (int) ((mx - x) / (float) w * 255))));
     }
 
-    private boolean mouseDown = false;
     private boolean isClick(int mx, int my, int x, int y, int w, int h) { return mouseDown && mx >= x && mx <= x + w && my >= y && my <= y + h; }
-    private boolean isClicking(int mx, int my) { return mouseDown; }
-
     @Override public void renderBackground(DrawContext ctx, int mx, int my, float d) { ctx.fill(0, 0, width, height, 0x80000000); }
 
     public boolean mouseClicked(double mx, double my, int button) {
         mouseDown = true;
-        int listX = panelX + 6, listY = panelY + 40;
-        int listW = panelW - 12;
-        int yy = listY - scroll;
+        int listX = panelX + 6, listY = panelY + 40, listW = panelW - 12, yy = listY - scroll;
         for (Module m : AnonClient.MODULE_MANAGER.byCategory(currentCat)) {
             int rowH = 18;
             if (mx >= listX && mx <= listX + listW && my >= yy && my <= yy + rowH) {
-                if (button == 0) {
-                    if (mx >= listX + listW - 16) m.expanded = !m.expanded;
-                    else m.toggle();
-                } else if (button == 1) m.expanded = !m.expanded;
+                if (button == 0) { if (mx >= listX + listW - 16) m.expanded = !m.expanded; else m.toggle(); }
+                else if (button == 1) m.expanded = !m.expanded;
                 return true;
             }
             yy += rowH + 2;
@@ -1150,34 +1001,18 @@ class ClickGUI extends Screen {
         return super.mouseClicked(mx, my, button);
     }
 
-    public boolean mouseReleased(double mx, double my, int button) {
-        mouseDown = false;
-        dragging = null;
-        return super.mouseReleased(mx, my, button);
-    }
-
+    public boolean mouseReleased(double mx, double my, int button) { mouseDown = false; dragging = null; return super.mouseReleased(mx, my, button); }
     public boolean mouseDragged(double mx, double my, int button, double dx, double dy) {
         if (dragging != null) {
-            int listX = panelX + 6;
-            int listW = panelW - 12;
-            double pct = (mx - (listX + 8)) / (double) (listW - 16);
-            dragging.set(dragging.min + Math.max(0, Math.min(1, pct)) * (dragging.max - dragging.min));
+            int listX = panelX + 6, listW = panelW - 12;
+            dragging.set(dragging.min + Math.max(0, Math.min(1, (mx - (listX + 8)) / (double) (listW - 16))) * (dragging.max - dragging.min));
         }
         return super.mouseDragged(mx, my, button, dx, dy);
     }
-
-    public boolean mouseScrolled(double mx, double my, double h, double v) {
-        scroll = Math.max(0, scroll - (int) (v * 20));
-        return super.mouseScrolled(mx, my, h, v);
-    }
-
+    public boolean mouseScrolled(double mx, double my, double h, double v) { scroll = Math.max(0, scroll - (int) (v * 20)); return super.mouseScrolled(mx, my, h, v); }
     public boolean keyPressed(int key, int sc, int mod) {
-        if (key == GLFW.GLFW_KEY_0 || key == GLFW.GLFW_KEY_ESCAPE) {
-            MinecraftClient.getInstance().setScreen(null);
-            return true;
-        }
+        if (key == GLFW.GLFW_KEY_0 || key == GLFW.GLFW_KEY_ESCAPE) { MinecraftClient.getInstance().setScreen(null); return true; }
         return super.keyPressed(key, sc, mod);
     }
-
     @Override public boolean shouldPause() { return false; }
 }
