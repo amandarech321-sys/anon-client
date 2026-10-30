@@ -456,7 +456,7 @@ class Scaffold extends Module {
         int slot = -1;
         for (int i = 0; i < 9; i++) if (mc.player.getInventory().getStack(i).getItem() instanceof BlockItem) { slot = i; break; }
         if (slot != -1) {
-            mc.player.getInventory().selectedSlot = slot; BlockPos below = mc.player.getBlockPos().down();
+        mc.player.getInventory().setSelectedSlot(slot); BlockPos below = mc.player.getBlockPos().down();
             if (mc.world.getBlockState(below).isAir()) {
                 mc.interactionManager.interactBlock(mc.player, Hand.MAIN_HAND, new BlockHitResult(Vec3d.ofCenter(below), Direction.UP, below, false)); mc.player.swingHand(Hand.MAIN_HAND);
             }
@@ -533,7 +533,7 @@ class AutoTool extends Module {
                 if (speed > bestSpeed) { bestSpeed = speed; bestSlot = i; }
             }
         }
-        if (bestSlot != -1) mc.player.getInventory().selectedSlot = bestSlot;
+mc.player.getInventory().setSelectedSlot(bestSlot);
     }
 }
 
