@@ -2,6 +2,7 @@ package com.anon.client.mixin;
 
 import com.anon.client.AnonClient;
 import com.anon.client.Fullbright;
+import com.anon.client.NumSetting;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.network.packet.Packet;
@@ -25,7 +26,7 @@ class MixinNetworkHandler {
             if (velocityMod != null && velocityMod.isEnabled()) {
                 var h = velocityMod.settings.get(0);
                 var v = velocityMod.settings.get(1);
-                if (h != null && v != null && h instanceof com.anon.client.NumSetting n1 && v instanceof com.anon.client.NumSetting n2) {
+                if (h instanceof NumSetting n1 && v instanceof NumSetting n2) {
                     if (n1.value == 0 && n2.value == 0) {
                         ci.cancel();
                     }
