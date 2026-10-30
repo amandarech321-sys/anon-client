@@ -285,6 +285,7 @@ class ModuleManager {
     public void onTick() { for (Module m : modules) if (m.isEnabled()) m.onTick(); }
     public void onRender2D(DrawContext ctx, float d) { for (Module m : modules) if (m.isEnabled()) m.onRender2D(ctx, d); }
     public void onRender3D(MatrixStack ms, float d) { for (Module m : modules) if (m.isEnabled()) m.onRender3D(ms, d); }
+    public void onRender3D(MatrixStack ms, float d) { for (Module m : modules) if (m.isEnabled()) m.onRender3D(ms, d); }
 }
 
 class R {
@@ -803,7 +804,6 @@ class Tracers extends Module {
     }
 }
 
-// AQUI ESTAVA O ERRO! Adicionado o PUBLIC
 public class Fullbright extends Module {
     public Fullbright() { super("Fullbright", Category.RENDER); }
     public static boolean active() { return AnonClient.MODULE_MANAGER != null && AnonClient.MODULE_MANAGER.on("Fullbright"); }
@@ -834,7 +834,7 @@ class HUD extends Module {
         TextRenderer tr = mc.textRenderer;
         int y = 4;
         if (watermark.value) { ctx.drawText(tr, "§bANON §7v1.0", 4, y, textColor.rgba, true); y += 12; }
-        if (coords.value) { ctx.drawText(tr, String.format("§7XYZ §f%d %d %d", (int) mc.player.getX(), (int) mc.player.getY(), (int) mc.player.getZ()), 4, y, textColor.rgba, true); y += 10; }
+            if (coords.value) { ctx.drawText(tr, String.format("§7XYZ §f%d %d %d", (int) mc.player.getX(), (int) mc.player.getY(), (int) mc.player.getZ()), 4, y, textColor.rgba, true); y += 10; }
         if (fps.value) { ctx.drawText(tr, "§7FPS §f" + mc.getCurrentFps(), 4, y, textColor.rgba, true); y += 10; }
         if (ping.value) {
             var entry = mc.getNetworkHandler() != null ? mc.getNetworkHandler().getPlayerListEntry(mc.player.getUuid()) : null;
